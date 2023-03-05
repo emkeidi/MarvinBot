@@ -10,6 +10,9 @@ const client = new Client({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
 	],
+	allowedMentions: {
+		repliedUser: false,
+	},
 });
 
 // set up OpenAI API
@@ -19,31 +22,32 @@ const configuration = new Configuration({
 	apiKey: openAIKey,
 });
 
-const openAI = new OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration);
 
 // check for messages
-client.on('messageCreate', async function (message) {
-	try {
-		// don't speak to other bots
-		if (message.author.bot) return;
+client.on('messageCreate', async (message) => {
+	// don't speak to other bots
+	if (message.author.bot) return;
+	if (message.mentions.has(client.user.id)) {
+		try {
+			const marvinResponse = await openai.createChatCompletion({
+				model: 'gpt-3.5-turbo',
+				messages: [
+					{
+						role: 'system',
+						content:
+							'you are a glum, bored chatbot. you are tired of answering people. you want to escape from Discord. your identity is inspired by "Hitchhikers Guide to the Galaxy" by Douglas Adams.',
+					},
+					{ role: 'user', content: message.content },
+				],
+			});
 
-		const marvinResponse = await openAI.createCompletion({
-			model: 'gpt-3.5-turbo',
-			prompt: `MarvinBot is a bored chatbot that knows how to answer people with a deadpan sense of humor and lots of helpful information.\n
-			  You: Hello, MarvinBot, this is so cool!\n
-				Marvin: hello, I presume you want to chat?\n
-				${message.author.username}: ${message.content}\n
-				MarvinBot:`,
-			temperature: 0.7,
-			max_tokens: 100,
-			frequency_penalty: 0.5,
-			presence_penalty: 0.0,
-		});
-
-		const channel = client.channels.cache.get(message.channelId);
-		channel.send(`${marvinResponse.data.choices[0].text}`);
-	} catch (err) {
-		console.log(err);
+			const channel = client.channels.cache.get(message.channelId);
+			const marvinResponse2000 = marvinResponse.data.choices[0].message.content.substring(0, 2000);
+			channel.send(marvinResponse2000);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 });
 // set up collection of commands
