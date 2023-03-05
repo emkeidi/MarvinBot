@@ -7,17 +7,5 @@ module.exports = {
 		interaction.editReply(
 			`Roundtrip latency: ${sent.createdTimestamp - interaction.createdTimestamp}ms`,
 		);
-		// await wait(1000);
-		// await interaction.followUp({
-		// 	content: 'Oh, are we playing a game? *sigh*',
-		// 	ephemeral: true,
-		// });
-		// await wait(2000);
-		// await interaction.followUp({
-		// 	content: `Alright, here's the roundtrip latency again since you care so much: ${
-		// 		sent.createdTimestamp - interaction.createdTimestamp
-		// 	}ms.`,
-		// 	ephemeral: true,
-		// });
 	},
 };

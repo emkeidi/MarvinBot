@@ -11,15 +11,6 @@ module.exports = {
 			console.error(`No command matching ${interaction.commandName} was found.`);
 			return;
 		}
-
-		// if (interaction.commandName === 'ping') {
-		// 	const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
-		// 	interaction.editReply(
-		// 		`Roundtrip latency: ${sent.createdTimestamp - interaction.createdTimestamp}ms`,
-		// 	);
-		// 	await interaction.followUp({ content: 'In that case, pong. *sigh*', ephemeral: true });
-		// }
-
 		try {
 			await command.execute(interaction);
 			const event = getCurrentTimestamp();
