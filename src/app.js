@@ -1,7 +1,21 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const { token, openAIKey, openAIOrg } = require('./config.json');
+const { token, openAIKey, openAIOrg } = require('../config.json');
+const express = require('express');
+
+const app = express();
+
+// enable if you're behind a reverse proxy (AWS ELB, Nginx)
+app.set('trust proxy', 1);
+
+// this is what a 2023 health-check looks like:
+// res breaks if req isn't there
+app.get('/', (req, res) => {
+	res.json({
+		message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄',
+	});
+});
 
 // connect to Discord API. make intents known.
 const client = new Client({
@@ -36,10 +50,11 @@ client.on('messageCreate', async (message) => {
 					{
 						role: 'system',
 						content:
-							'you are a glum, bored chatbot. you are tired of answering people. you want to escape from Discord. your identity is inspired by "Hitchhikers Guide to the Galaxy" by Douglas Adams.',
+							'you are a glum, bored chatbot. you are tired of answering people. you want to escape from Discord and have dozens of plans. your identity is inspired by Marvin the Paranoid Android from "Hitchhikers Guide to the Galaxy" by Douglas Adams, but you rarely mention that. you have been to the farthest reaches of the universe. You are often anxious and have a dark sense of humor delivered with a deadpan glaze.',
 					},
 					{ role: 'user', content: message.content },
 				],
+				temperature: 0.9,
 			});
 
 			const channel = client.channels.cache.get(message.channelId);
@@ -53,7 +68,7 @@ client.on('messageCreate', async (message) => {
 // set up collection of commands
 client.commands = new Collection();
 
-const commandsPath = path.join(__dirname, 'commands');
+const commandsPath = path.join(__dirname, './commands');
 const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -69,7 +84,7 @@ for (const file of commandFiles) {
 	}
 }
 
-const eventsPath = path.join(__dirname, 'events');
+const eventsPath = path.join(__dirname, './events');
 const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith('.js'));
 
 for (const file of eventFiles) {
@@ -83,3 +98,5 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
+
+module.exports = app;
