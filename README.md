@@ -23,4 +23,7 @@ There a few basic slash commands calling on public APIs.
 - 🆔 /user: echos when the user joined the server
 - 💠 /mcstats: custom Minecraft Stat Checker. B.Y.O.J. (Bring Your Own JSON)
 
-Tagging MarvinBot with '@'
+Tag MarvinBot (or whatever you name your bot) in a server channel to receive a reply from an OpenAI model.
+This code is set to 'gpt-turbo-3.5' for the sake of cost, but this can be easily tweaked in 'src/app.js'.
+
+![stats](assets/mcStats.png)
