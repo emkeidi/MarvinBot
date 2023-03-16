@@ -160,7 +160,7 @@ module.exports = {
 					'https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/ab/Diamond_JE3_BE3.png/revision/latest?cb=20200325185152',
 			})
 			.setDescription("How's my mining?")
-			.setThumbnail(playerResponseJson.data.player.avatar)
+			.setThumbnail(await playerResponseJson.data.player.avatar)
 			.addFields(
 				{
 					name: ':pick: Most Mined',
@@ -280,7 +280,7 @@ module.exports = {
 					inline: true,
 				},
 			)
-			.setImage(`https://crafthead.net/armor/body/${playerResponseJson.data.player.username}`)
+			.setImage(`https://crafthead.net/armor/body/${playerResponseJson.data.player.id}`)
 			.setTimestamp()
 			.setFooter({
 				text: 'helping you die less & mine more',
