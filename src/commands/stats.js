@@ -28,8 +28,6 @@ module.exports = {
 		console.log(playerResponseJson.data.player.id);
 		console.log(playerResponseJson.data.player.username);
 
-		// const dirPath = path.resolve(__dirname, '/public/playerStats/');
-
 		const playerStatFiles = fs
 			.readdirSync(path.join(__dirname, './playerStats'))
 			.filter((file) => file.endsWith('.json'));
